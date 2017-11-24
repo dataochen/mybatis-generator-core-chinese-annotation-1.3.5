@@ -66,6 +66,21 @@ http://mbg.cndocs.tk/
             <property name="enableUpdateByPrimaryKeySelective" value="true"/>
             <property name="enableUpdateByExample" value="true"/>
         </plugin>
+        <!-- controller层插件 -->
+        <plugin type="org.mybatis.generator.plugins.MybatisControllerPlugin">
+            <property name="targetPackage" value="${controller.package}"/>
+            <property name="implementationPackage" value="${controller.package}"/>
+            <property name="implementationServicePackage" value="${service.package.impl}"/>
+            <property name="targetProject" value="${controller.path}"/>
+            <property name="enableInsert" value="true"/>
+            <property name="enableUpdateByExampleSelective" value="true"/>
+            <property name="enableInsertSelective" value="true"/>
+            <property name="enableUpdateByPrimaryKey" value="true"/>
+            <property name="enableDeleteByPrimaryKey" value="true"/>
+            <property name="enableDeleteByExample" value="true"/>
+            <property name="enableUpdateByPrimaryKeySelective" value="true"/>
+            <property name="enableUpdateByExample" value="true"/>
+        </plugin>
 
         <!-- 注释 -->
         <commentGenerator>
@@ -140,8 +155,7 @@ http://mbg.cndocs.tk/
         <!-- mvn mybatis-generator:generate  -->
         <!-- 指定生成的数据库表 -->
         <!-- domainObjectName：指定生成的实体类的文件名 -->
-        <table tableName="sys_user" domainObjectName="User"/>
-        <table tableName="sys_user_role" domainObjectName="UserRole"/>
+        <table tableName="user" domainObjectName="User"/>
 
         <!-- 其他需求：有些表的字段需要指定java类型 -->
         <!--<table schema="management_system" tableName="s_user"-->
