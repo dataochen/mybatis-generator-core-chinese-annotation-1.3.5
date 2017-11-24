@@ -183,16 +183,16 @@ public class MybatisControllerPlugin extends PluginAdapter {
         /**
          * type 的意义 pojo 1 ;key 2 ;example 3 ;pojo+example 4
          */
-        if (enableDeleteByPrimaryKey) {
-            topLevelClass.addMethod(getOtherInteger("deleteByPrimaryKey", introspectedTable, tableName, 2));
-        }
-        if (enableUpdateByPrimaryKeySelective) {
-            topLevelClass.addMethod(getOtherInteger("updateByPrimaryKeySelective", introspectedTable, tableName, 1));
-
-        }
-        if (enableInsertSelective) {
-            topLevelClass.addMethod(getOtherInsertboolean("insertSelective", introspectedTable, tableName));
-        }
+//        if (enableDeleteByPrimaryKey) {
+//            topLevelClass.addMethod(getOtherInteger("deleteByPrimaryKey", introspectedTable, tableName, 2));
+//        }
+//        if (enableUpdateByPrimaryKeySelective) {
+//            topLevelClass.addMethod(getOtherInteger("updateByPrimaryKeySelective", introspectedTable, tableName, 1));
+//
+//        }
+//        if (enableInsertSelective) {
+//            topLevelClass.addMethod(getOtherInsertboolean("insertSelective", introspectedTable, tableName));
+//        }
         // 生成文件
         GeneratedJavaFile file = new GeneratedJavaFile(topLevelClass, project, context.getJavaFormatter());
         files.add(file);
@@ -326,13 +326,23 @@ public class MybatisControllerPlugin extends PluginAdapter {
         // method.addBodyLine("try {");
         sb.append("return this.");
         sb.append(getDaoShort());
-        if (introspectedTable.hasBLOBColumns()
-                && (!"updateByPrimaryKeySelective".equals(methodName) && !"deleteByPrimaryKey".equals(methodName)
-                && !"deleteByExample".equals(methodName) && !"updateByExampleSelective".equals(methodName))) {
-            sb.append(methodName + "WithoutBLOBs");
-        } else {
-            sb.append(methodName);
+        if ("queryDetail".equals(methodName)) {
+            sb.append("selectByPrimaryKey");
+        } else if ("delete".equals(methodName)) {
+            sb.append("deleteByPrimaryKey");
+        }else if ("update".equals(methodName)) {
+            sb.append("updateByPrimaryKeySelective");
+        }else if ("insert".equals(methodName)) {
+            sb.append("insertSelective");
         }
+
+//        if (introspectedTable.hasBLOBColumns()
+//                && (!"updateByPrimaryKeySelective".equals(methodName) && !"deleteByPrimaryKey".equals(methodName)
+//                && !"deleteByExample".equals(methodName) && !"updateByExampleSelective".equals(methodName))) {
+//            sb.append(methodName + "WithoutBLOBs");
+//        } else {
+//            sb.append(methodName);
+//        }
         sb.append("(");
         sb.append(params);
         sb.append(");");

@@ -322,14 +322,14 @@ public class MybatisServicePlugin extends PluginAdapter {
      */
     protected Method countByExample(IntrospectedTable introspectedTable, String tableName) {
         Method method = new Method();
-        method.setName("countByExample");
+        method.setName("queryCount");
         method.setReturnType(FullyQualifiedJavaType.getIntInstance());
-        method.addParameter(new Parameter(pojoCriteriaType, "example"));
+        method.addParameter(new Parameter(pojoType, "example"));
         method.setVisibility(JavaVisibility.PUBLIC);
         StringBuilder sb = new StringBuilder();
         sb.append("int count = this.");
         sb.append(getDaoShort());
-        sb.append("countByExample");
+        sb.append("queryCount");
         sb.append("(");
         sb.append("example");
         sb.append(");");
@@ -344,18 +344,20 @@ public class MybatisServicePlugin extends PluginAdapter {
      */
     protected Method selectByExample(IntrospectedTable introspectedTable, String tableName) {
         Method method = new Method();
-        method.setName("selectByExample");
+        method.setName("queryList");
         method.setReturnType(new FullyQualifiedJavaType("List<" + tableName + ">"));
-        method.addParameter(new Parameter(pojoCriteriaType, "example"));
+        method.addParameter(new Parameter(pojoType, "example"));
         method.setVisibility(JavaVisibility.PUBLIC);
         StringBuilder sb = new StringBuilder();
         sb.append("return this.");
         sb.append(getDaoShort());
-        if (introspectedTable.hasBLOBColumns()) {
-            sb.append("selectByExampleWithoutBLOBs");
-        } else {
-            sb.append("selectByExample");
-        }
+//        if (introspectedTable.hasBLOBColumns()) {
+//            sb.append("selectByExampleWithoutBLOBs");
+//        } else {
+//            sb.append("queryList");
+//        }
+        sb.append("queryList");
+
         sb.append("(");
         sb.append("example");
         sb.append(");");

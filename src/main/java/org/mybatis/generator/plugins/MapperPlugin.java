@@ -4,13 +4,11 @@ import org.mybatis.generator.api.GeneratedJavaFile;
 import org.mybatis.generator.api.IntrospectedTable;
 import org.mybatis.generator.api.PluginAdapter;
 import org.mybatis.generator.api.dom.java.*;
-import org.mybatis.generator.config.CommentGeneratorConfiguration;
-import org.mybatis.generator.config.Context;
-import org.mybatis.generator.internal.DefaultCommentGenerator;
-import org.mybatis.generator.internal.util.StringUtility;
 
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * 统一Mapper生成
@@ -93,7 +91,6 @@ public class MapperPlugin extends PluginAdapter {
                     new FullyQualifiedJavaType(interfaceType.getShortName()
                             + "<"
                             + entityType.getShortName()
-                            + "," + exampleType.getShortName()
                             + "," + introspectedTable.getPrimaryKeyColumns().get(0).getFullyQualifiedJavaType().getShortName()
                             + ">"));
 
@@ -116,14 +113,14 @@ public class MapperPlugin extends PluginAdapter {
             interface1.addImportedType(new FullyQualifiedJavaType("org.apache.ibatis.annotations.Param"));
 
             // 添加泛型支持
-            interfaceType.addTypeArgument(new FullyQualifiedJavaType("M, E, ID extends Serializable"));
+            interfaceType.addTypeArgument(new FullyQualifiedJavaType("M, ID extends Serializable"));
 
             // 添加方法并加注释
             Method method = countByExample(introspectedTable);
             interface1.addMethod(method);
 
-            method = deleteByExample(introspectedTable);
-            interface1.addMethod(method);
+//            method = deleteByExample(introspectedTable);
+//            interface1.addMethod(method);
 
             method = deleteByPrimaryKey(introspectedTable);
             interface1.addMethod(method);
@@ -140,8 +137,8 @@ public class MapperPlugin extends PluginAdapter {
             method = insertBatchSelective(introspectedTable);
             interface1.addMethod(method);
 
-            method = selectByExampleWithBLOBs(introspectedTable);
-            interface1.addMethod(method);
+//            method = selectByExampleWithBLOBs(introspectedTable);
+//            interface1.addMethod(method);
 
             method = selectByExample(introspectedTable);
             interface1.addMethod(method);
@@ -152,20 +149,20 @@ public class MapperPlugin extends PluginAdapter {
             method = updateByPrimaryKeySelective(introspectedTable);
             interface1.addMethod(method);
 
-            method = updateByPrimaryKeyWithBLOBs(introspectedTable);
-            interface1.addMethod(method);
+//            method = updateByPrimaryKeyWithBLOBs(introspectedTable);
+//            interface1.addMethod(method);
 
             method = updateByPrimaryKey(introspectedTable);
             interface1.addMethod(method);
 
-            method = updateByExample(introspectedTable);
-            interface1.addMethod(method);
-
-            method = updateByExampleSelective(introspectedTable);
-            interface1.addMethod(method);
-
-            method = updateByExampleWithBLOBs(introspectedTable);
-            interface1.addMethod(method);
+//            method = updateByExample(introspectedTable);
+//            interface1.addMethod(method);
+//
+//            method = updateByExampleSelective(introspectedTable);
+//            interface1.addMethod(method);
+//
+//            method = updateByExampleWithBLOBs(introspectedTable);
+//            interface1.addMethod(method);
 
             addExampleClassComment(interface1);
 
@@ -178,7 +175,7 @@ public class MapperPlugin extends PluginAdapter {
 
     private void addExampleClassComment(JavaElement javaElement) {
         javaElement.addJavaDocLine("/**");
-        javaElement.addJavaDocLine(" * 通用IMapper<M, E, ID>");
+        javaElement.addJavaDocLine(" * 通用IMapper<M, ID>");
         javaElement.addJavaDocLine(" * M:实体类");
         javaElement.addJavaDocLine(" * E:Example");
         javaElement.addJavaDocLine(" * ID:主键的变量类型");
@@ -194,7 +191,7 @@ public class MapperPlugin extends PluginAdapter {
      */
     protected Method countByExample(IntrospectedTable introspectedTable) {
         Method method = new Method();
-        method.setName("countByExample");
+        method.setName("queryCount");
         method.setReturnType(FullyQualifiedJavaType.getIntInstance());
         method.addParameter(new Parameter(E, "example"));
         method.setVisibility(JavaVisibility.PUBLIC);
@@ -298,7 +295,7 @@ public class MapperPlugin extends PluginAdapter {
      */
     protected Method selectByExample(IntrospectedTable introspectedTable) {
         Method method = new Method();
-        method.setName("selectByExample");
+        method.setName("queryList");
         method.setReturnType(new FullyQualifiedJavaType("List<M>"));
         method.addParameter(new Parameter(E, "example"));
         method.setVisibility(JavaVisibility.PUBLIC);
