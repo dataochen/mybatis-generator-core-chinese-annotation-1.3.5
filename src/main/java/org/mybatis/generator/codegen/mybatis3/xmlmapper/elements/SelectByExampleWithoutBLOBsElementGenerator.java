@@ -19,8 +19,6 @@ import org.mybatis.generator.api.dom.xml.Attribute;
 import org.mybatis.generator.api.dom.xml.TextElement;
 import org.mybatis.generator.api.dom.xml.XmlElement;
 
-import static org.mybatis.generator.internal.util.StringUtility.stringHasValue;
-
 /**
  *
  * @author Jeff Butler
@@ -35,7 +33,7 @@ public class SelectByExampleWithoutBLOBsElementGenerator extends
 
     @Override
     public void addElements(XmlElement parentElement) {
-        String fqjt = introspectedTable.getExampleType();
+        String fqjt = introspectedTable.getBaseRecordType();
 
         XmlElement answer = new XmlElement("select"); //$NON-NLS-1$
 
@@ -46,34 +44,22 @@ public class SelectByExampleWithoutBLOBsElementGenerator extends
         answer.addAttribute(new Attribute("parameterType", fqjt)); //$NON-NLS-1$
 
         context.getCommentGenerator().addComment(answer);
-
-        answer.addElement(new TextElement("select")); //$NON-NLS-1$
-        XmlElement ifElement = new XmlElement("if"); //$NON-NLS-1$
-        ifElement.addAttribute(new Attribute("test", "distinct")); //$NON-NLS-1$ //$NON-NLS-2$
-        ifElement.addElement(new TextElement("distinct")); //$NON-NLS-1$
-        answer.addElement(ifElement);
-
+        answer.addElement(new TextElement("select "));
+        XmlElement includeElement = new XmlElement("include"); //$NON-NLS-1$
+        includeElement.addAttribute(new Attribute("refid", //$NON-NLS-1$
+                introspectedTable.getBaseColumnListId()));
+        answer.addElement(includeElement);
         StringBuilder sb = new StringBuilder();
-        if (stringHasValue(introspectedTable
-                .getSelectByExampleQueryId())) {
-            sb.append('\'');
-            sb.append(introspectedTable.getSelectByExampleQueryId());
-            sb.append("' as QUERYID,"); //$NON-NLS-1$
-            answer.addElement(new TextElement(sb.toString()));
-        }
-        answer.addElement(getBaseColumnListElement());
-
-        sb.setLength(0);
-        sb.append("from "); //$NON-NLS-1$
+        sb.append(" from "); //$NON-NLS-1$
         sb.append(introspectedTable
                 .getAliasedFullyQualifiedTableNameAtRuntime());
+        sb.append(" WHERE 1=1 ");
         answer.addElement(new TextElement(sb.toString()));
-        answer.addElement(getExampleIncludeElement());
+        XmlElement includeElement1 = new XmlElement("include"); //$NON-NLS-1$
+        includeElement1.addAttribute(new Attribute("refid", //$NON-NLS-1$
+                introspectedTable.getCustomWhereSql()));
+        answer.addElement(includeElement1);
 
-        ifElement = new XmlElement("if"); //$NON-NLS-1$
-        ifElement.addAttribute(new Attribute("test", "orderByClause != null")); //$NON-NLS-1$ //$NON-NLS-2$
-        ifElement.addElement(new TextElement("order by ${orderByClause}")); //$NON-NLS-1$
-        answer.addElement(ifElement);
 
         if (context.getPlugins()
                 .sqlMapSelectByExampleWithoutBLOBsElementGenerated(answer,

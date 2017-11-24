@@ -32,32 +32,49 @@ import static org.mybatis.generator.internal.util.StringUtility.stringHasValue;
  * the actual code generation methods left unimplemented.
  *
  * @author Jeff Butler
- *
  */
 public abstract class IntrospectedTable {
 
-    /** The table configuration. */
+    /**
+     * The table configuration.
+     */
     protected TableConfiguration tableConfiguration;
-    /** The fully qualified table. */
+    /**
+     * The fully qualified table.
+     */
     protected FullyQualifiedTable fullyQualifiedTable;
-    /** The context. */
+    /**
+     * The context.
+     */
     protected Context context;
-    /** The rules. */
+    /**
+     * The rules.
+     */
     protected Rules rules;
-    /** The primary key columns. */
+    /**
+     * The primary key columns.
+     */
     protected List<IntrospectedColumn> primaryKeyColumns;
-    /** The base columns. */
+    /**
+     * The base columns.
+     */
     protected List<IntrospectedColumn> baseColumns;
-    /** The blob columns. */
+    /**
+     * The blob columns.
+     */
     protected List<IntrospectedColumn> blobColumns;
-    /** The target runtime. */
+    /**
+     * The target runtime.
+     */
     protected TargetRuntime targetRuntime;
     /**
      * Attributes may be used by plugins to capture table related state between
      * the different plugin calls.
      */
     protected Map<String, Object> attributes;
-    /** Internal attributes are used to store commonly accessed items by all code generators. */
+    /**
+     * Internal attributes are used to store commonly accessed items by all code generators.
+     */
     protected Map<IntrospectedTable.InternalAttribute, String> internalAttributes;
     /**
      * Table remarks retrieved from database metadata
@@ -71,8 +88,7 @@ public abstract class IntrospectedTable {
     /**
      * Instantiates a new introspected table.
      *
-     * @param targetRuntime
-     *            the target runtime
+     * @param targetRuntime the target runtime
      */
     public IntrospectedTable(TargetRuntime targetRuntime) {
         super();
@@ -96,8 +112,7 @@ public abstract class IntrospectedTable {
     /**
      * Sets the fully qualified table.
      *
-     * @param fullyQualifiedTable
-     *            the new fully qualified table
+     * @param fullyQualifiedTable the new fully qualified table
      */
     public void setFullyQualifiedTable(FullyQualifiedTable fullyQualifiedTable) {
         this.fullyQualifiedTable = fullyQualifiedTable;
@@ -133,8 +148,7 @@ public abstract class IntrospectedTable {
     /**
      * Gets the column.
      *
-     * @param columnName
-     *            the column name
+     * @param columnName the column name
      * @return the column
      */
     public IntrospectedColumn getColumn(String columnName) {
@@ -363,8 +377,7 @@ public abstract class IntrospectedTable {
     /**
      * This method exists to give plugins the opportunity to replace the calculated rules if necessary.
      *
-     * @param rules
-     *            the new rules
+     * @param rules the new rules
      */
     public void setRules(Rules rules) {
         this.rules = rules;
@@ -373,8 +386,7 @@ public abstract class IntrospectedTable {
     /**
      * Gets the table configuration property.
      *
-     * @param property
-     *            the property
+     * @param property the property
      * @return the table configuration property
      */
     public String getTableConfigurationProperty(String property) {
@@ -393,8 +405,7 @@ public abstract class IntrospectedTable {
     /**
      * Sets the primary key type.
      *
-     * @param primaryKeyType
-     *            the new primary key type
+     * @param primaryKeyType the new primary key type
      */
     public void setPrimaryKeyType(String primaryKeyType) {
         internalAttributes.put(InternalAttribute.ATTR_PRIMARY_KEY_TYPE,
@@ -405,7 +416,7 @@ public abstract class IntrospectedTable {
      * Gets the base record type.
      *
      * @return the type for the record (the class that holds non-primary key and non-BLOB fields). Note that the value
-     *         will be calculated regardless of whether the table has these columns or not.
+     * will be calculated regardless of whether the table has these columns or not.
      */
     public String getBaseRecordType() {
         return internalAttributes.get(InternalAttribute.ATTR_BASE_RECORD_TYPE);
@@ -414,8 +425,7 @@ public abstract class IntrospectedTable {
     /**
      * Sets the base record type.
      *
-     * @param baseRecordType
-     *            the new base record type
+     * @param baseRecordType the new base record type
      */
     public void setBaseRecordType(String baseRecordType) {
         internalAttributes.put(InternalAttribute.ATTR_BASE_RECORD_TYPE,
@@ -434,8 +444,7 @@ public abstract class IntrospectedTable {
     /**
      * Sets the example type.
      *
-     * @param exampleType
-     *            the new example type
+     * @param exampleType the new example type
      */
     public void setExampleType(String exampleType) {
         internalAttributes
@@ -446,7 +455,7 @@ public abstract class IntrospectedTable {
      * Gets the record with blo bs type.
      *
      * @return the type for the record with BLOBs class. Note that the value will be calculated regardless of whether
-     *         the table has BLOB columns or not.
+     * the table has BLOB columns or not.
      */
     public String getRecordWithBLOBsType() {
         return internalAttributes
@@ -456,8 +465,7 @@ public abstract class IntrospectedTable {
     /**
      * Sets the record with blo bs type.
      *
-     * @param recordWithBLOBsType
-     *            the new record with blo bs type
+     * @param recordWithBLOBsType the new record with blo bs type
      */
     public void setRecordWithBLOBsType(String recordWithBLOBsType) {
         internalAttributes.put(InternalAttribute.ATTR_RECORD_WITH_BLOBS_TYPE,
@@ -479,8 +487,7 @@ public abstract class IntrospectedTable {
     /**
      * Sets the ibatis2 sql map file name.
      *
-     * @param sqlMapFileName
-     *            the new ibatis2 sql map file name
+     * @param sqlMapFileName the new ibatis2 sql map file name
      */
     public void setIbatis2SqlMapFileName(String sqlMapFileName) {
         internalAttributes.put(
@@ -501,8 +508,7 @@ public abstract class IntrospectedTable {
     /**
      * Sets the ibatis2 sql map namespace.
      *
-     * @param sqlMapNamespace
-     *            the new ibatis2 sql map namespace
+     * @param sqlMapNamespace the new ibatis2 sql map namespace
      */
     public void setIbatis2SqlMapNamespace(String sqlMapNamespace) {
         internalAttributes.put(
@@ -537,8 +543,7 @@ public abstract class IntrospectedTable {
     /**
      * Sets the my batis3 fallback sql map namespace.
      *
-     * @param sqlMapNamespace
-     *            the new my batis3 fallback sql map namespace
+     * @param sqlMapNamespace the new my batis3 fallback sql map namespace
      */
     public void setMyBatis3FallbackSqlMapNamespace(String sqlMapNamespace) {
         internalAttributes.put(
@@ -559,8 +564,7 @@ public abstract class IntrospectedTable {
     /**
      * Sets the ibatis2 sql map package.
      *
-     * @param sqlMapPackage
-     *            the new ibatis2 sql map package
+     * @param sqlMapPackage the new ibatis2 sql map package
      */
     public void setIbatis2SqlMapPackage(String sqlMapPackage) {
         internalAttributes.put(InternalAttribute.ATTR_IBATIS2_SQL_MAP_PACKAGE,
@@ -580,8 +584,7 @@ public abstract class IntrospectedTable {
     /**
      * Sets the DAO implementation type.
      *
-     * @param DAOImplementationType
-     *            the new DAO implementation type
+     * @param DAOImplementationType the new DAO implementation type
      */
     public void setDAOImplementationType(String DAOImplementationType) {
         internalAttributes.put(InternalAttribute.ATTR_DAO_IMPLEMENTATION_TYPE,
@@ -601,8 +604,7 @@ public abstract class IntrospectedTable {
     /**
      * Sets the DAO interface type.
      *
-     * @param DAOInterfaceType
-     *            the new DAO interface type
+     * @param DAOInterfaceType the new DAO interface type
      */
     public void setDAOInterfaceType(String DAOInterfaceType) {
         internalAttributes.put(InternalAttribute.ATTR_DAO_INTERFACE_TYPE,
@@ -622,8 +624,7 @@ public abstract class IntrospectedTable {
     /**
      * Adds the column.
      *
-     * @param introspectedColumn
-     *            the introspected column
+     * @param introspectedColumn the introspected column
      */
     public void addColumn(IntrospectedColumn introspectedColumn) {
         if (introspectedColumn.isBLOBColumn()) {
@@ -638,8 +639,7 @@ public abstract class IntrospectedTable {
     /**
      * Adds the primary key column.
      *
-     * @param columnName
-     *            the column name
+     * @param columnName the column name
      */
     public void addPrimaryKeyColumn(String columnName) {
         boolean found = false;
@@ -673,8 +673,7 @@ public abstract class IntrospectedTable {
     /**
      * Gets the attribute.
      *
-     * @param name
-     *            the name
+     * @param name the name
      * @return the attribute
      */
     public Object getAttribute(String name) {
@@ -684,8 +683,7 @@ public abstract class IntrospectedTable {
     /**
      * Removes the attribute.
      *
-     * @param name
-     *            the name
+     * @param name the name
      */
     public void removeAttribute(String name) {
         attributes.remove(name);
@@ -694,10 +692,8 @@ public abstract class IntrospectedTable {
     /**
      * Sets the attribute.
      *
-     * @param name
-     *            the name
-     * @param value
-     *            the value
+     * @param name  the name
+     * @param value the value
      */
     public void setAttribute(String name, Object value) {
         attributes.put(name, value);
@@ -737,7 +733,7 @@ public abstract class IntrospectedTable {
         setSqlMapFullyQualifiedRuntimeTableName(calculateSqlMapFullyQualifiedRuntimeTableName());
         setSqlMapAliasedFullyQualifiedRuntimeTableName(calculateSqlMapAliasedFullyQualifiedRuntimeTableName());
 
-        setCountByExampleStatementId("countByExample"); //$NON-NLS-1$
+        setCountByExampleStatementId("queryCount"); //$NON-NLS-1$
         setDeleteByExampleStatementId("deleteByExample"); //$NON-NLS-1$
         setDeleteByPrimaryKeyStatementId("deleteByPrimaryKey"); //$NON-NLS-1$
         setInsertStatementId("insert"); //$NON-NLS-1$
@@ -745,7 +741,8 @@ public abstract class IntrospectedTable {
         setInsertBatchStatementId("insertBatch");
         setInsertBatchSelectiveStatementId("insertBatchSelective");
         setSelectAllStatementId("selectAll"); //$NON-NLS-1$
-        setSelectByExampleStatementId("selectByExample"); //$NON-NLS-1$
+        setSelectByExampleStatementId("queryList"); //$NON-NLS-1$
+        setCustomWhereSql("WhereQueryEntity"); //$NON-NLS-1$
         setSelectByExampleWithBLOBsStatementId("selectByExampleWithBLOBs"); //$NON-NLS-1$
         setSelectByPrimaryKeyStatementId("selectByPrimaryKey"); //$NON-NLS-1$
         setUpdateByExampleStatementId("updateByExample"); //$NON-NLS-1$
@@ -775,8 +772,7 @@ public abstract class IntrospectedTable {
     /**
      * Sets the blob column list id.
      *
-     * @param s
-     *            the new blob column list id
+     * @param s the new blob column list id
      */
     public void setBlobColumnListId(String s) {
         internalAttributes.put(InternalAttribute.ATTR_BLOB_COLUMN_LIST_ID, s);
@@ -795,8 +791,7 @@ public abstract class IntrospectedTable {
     /**
      * Sets the base column list id.
      *
-     * @param s
-     *            the new base column list id
+     * @param s the new base column list id
      */
     public void setBaseColumnListId(String s) {
         internalAttributes.put(InternalAttribute.ATTR_BASE_COLUMN_LIST_ID, s);
@@ -815,8 +810,7 @@ public abstract class IntrospectedTable {
     /**
      * Sets the example where clause id.
      *
-     * @param s
-     *            the new example where clause id
+     * @param s the new example where clause id
      */
     public void setExampleWhereClauseId(String s) {
         internalAttributes.put(InternalAttribute.ATTR_EXAMPLE_WHERE_CLAUSE_ID,
@@ -836,8 +830,7 @@ public abstract class IntrospectedTable {
     /**
      * Sets the my batis3 update by example where clause id.
      *
-     * @param s
-     *            the new my batis3 update by example where clause id
+     * @param s the new my batis3 update by example where clause id
      */
     public void setMyBatis3UpdateByExampleWhereClauseId(String s) {
         internalAttributes
@@ -859,8 +852,7 @@ public abstract class IntrospectedTable {
     /**
      * Sets the result map with blo bs id.
      *
-     * @param s
-     *            the new result map with blo bs id
+     * @param s the new result map with blo bs id
      */
     public void setResultMapWithBLOBsId(String s) {
         internalAttributes.put(InternalAttribute.ATTR_RESULT_MAP_WITH_BLOBS_ID,
@@ -880,8 +872,7 @@ public abstract class IntrospectedTable {
     /**
      * Sets the base result map id.
      *
-     * @param s
-     *            the new base result map id
+     * @param s the new base result map id
      */
     public void setBaseResultMapId(String s) {
         internalAttributes.put(InternalAttribute.ATTR_BASE_RESULT_MAP_ID, s);
@@ -900,8 +891,7 @@ public abstract class IntrospectedTable {
     /**
      * Sets the update by primary key with blo bs statement id.
      *
-     * @param s
-     *            the new update by primary key with blo bs statement id
+     * @param s the new update by primary key with blo bs statement id
      */
     public void setUpdateByPrimaryKeyWithBLOBsStatementId(String s) {
         internalAttributes
@@ -923,8 +913,7 @@ public abstract class IntrospectedTable {
     /**
      * Sets the update by primary key selective statement id.
      *
-     * @param s
-     *            the new update by primary key selective statement id
+     * @param s the new update by primary key selective statement id
      */
     public void setUpdateByPrimaryKeySelectiveStatementId(String s) {
         internalAttributes
@@ -946,8 +935,7 @@ public abstract class IntrospectedTable {
     /**
      * Sets the update by primary key statement id.
      *
-     * @param s
-     *            the new update by primary key statement id
+     * @param s the new update by primary key statement id
      */
     public void setUpdateByPrimaryKeyStatementId(String s) {
         internalAttributes.put(
@@ -967,8 +955,7 @@ public abstract class IntrospectedTable {
     /**
      * Sets the update by example with blo bs statement id.
      *
-     * @param s
-     *            the new update by example with blo bs statement id
+     * @param s the new update by example with blo bs statement id
      */
     public void setUpdateByExampleWithBLOBsStatementId(String s) {
         internalAttributes
@@ -990,8 +977,7 @@ public abstract class IntrospectedTable {
     /**
      * Sets the update by example selective statement id.
      *
-     * @param s
-     *            the new update by example selective statement id
+     * @param s the new update by example selective statement id
      */
     public void setUpdateByExampleSelectiveStatementId(String s) {
         internalAttributes
@@ -1013,8 +999,7 @@ public abstract class IntrospectedTable {
     /**
      * Sets the update by example statement id.
      *
-     * @param s
-     *            the new update by example statement id
+     * @param s the new update by example statement id
      */
     public void setUpdateByExampleStatementId(String s) {
         internalAttributes.put(
@@ -1034,8 +1019,7 @@ public abstract class IntrospectedTable {
     /**
      * Sets the select by primary key statement id.
      *
-     * @param s
-     *            the new select by primary key statement id
+     * @param s the new select by primary key statement id
      */
     public void setSelectByPrimaryKeyStatementId(String s) {
         internalAttributes.put(
@@ -1055,8 +1039,7 @@ public abstract class IntrospectedTable {
     /**
      * Sets the select by example with blo bs statement id.
      *
-     * @param s
-     *            the new select by example with blo bs statement id
+     * @param s the new select by example with blo bs statement id
      */
     public void setSelectByExampleWithBLOBsStatementId(String s) {
         internalAttributes
@@ -1078,8 +1061,7 @@ public abstract class IntrospectedTable {
     /**
      * Sets the select all statement id.
      *
-     * @param s
-     *            the new select all statement id
+     * @param s the new select all statement id
      */
     public void setSelectAllStatementId(String s) {
         internalAttributes.put(
@@ -1099,8 +1081,7 @@ public abstract class IntrospectedTable {
     /**
      * Sets the select by example statement id.
      *
-     * @param s
-     *            the new select by example statement id
+     * @param s the new select by example statement id
      */
     public void setSelectByExampleStatementId(String s) {
         internalAttributes.put(
@@ -1120,8 +1101,7 @@ public abstract class IntrospectedTable {
     /**
      * Sets the insert selective statement id.
      *
-     * @param s
-     *            the new insert selective statement id
+     * @param s the new insert selective statement id
      */
     public void setInsertSelectiveStatementId(String s) {
         internalAttributes.put(
@@ -1166,8 +1146,7 @@ public abstract class IntrospectedTable {
     /**
      * Sets the insert statement id.
      *
-     * @param s
-     *            the new insert statement id
+     * @param s the new insert statement id
      */
     public void setInsertStatementId(String s) {
         internalAttributes.put(InternalAttribute.ATTR_INSERT_STATEMENT_ID, s);
@@ -1186,8 +1165,7 @@ public abstract class IntrospectedTable {
     /**
      * Sets the delete by primary key statement id.
      *
-     * @param s
-     *            the new delete by primary key statement id
+     * @param s the new delete by primary key statement id
      */
     public void setDeleteByPrimaryKeyStatementId(String s) {
         internalAttributes.put(
@@ -1207,8 +1185,7 @@ public abstract class IntrospectedTable {
     /**
      * Sets the delete by example statement id.
      *
-     * @param s
-     *            the new delete by example statement id
+     * @param s the new delete by example statement id
      */
     public void setDeleteByExampleStatementId(String s) {
         internalAttributes.put(
@@ -1228,8 +1205,7 @@ public abstract class IntrospectedTable {
     /**
      * Sets the count by example statement id.
      *
-     * @param s
-     *            the new count by example statement id
+     * @param s the new count by example statement id
      */
     public void setCountByExampleStatementId(String s) {
         internalAttributes.put(
@@ -1263,8 +1239,7 @@ public abstract class IntrospectedTable {
     /**
      * Checks if is sub packages enabled.
      *
-     * @param propertyHolder
-     *            the property holder
+     * @param propertyHolder the property holder
      * @return true, if is sub packages enabled
      */
     private boolean isSubPackagesEnabled(PropertyHolder propertyHolder) {
@@ -1514,14 +1489,12 @@ public abstract class IntrospectedTable {
 
     /**
      * This method can be used to initialize the generators before they will be called.
-     *
+     * <p>
      * This method is called after all the setX methods, but before getNumberOfSubtasks(), getGeneratedJavaFiles, and
      * getGeneratedXmlFiles.
      *
-     * @param warnings
-     *            the warnings
-     * @param progressCallback
-     *            the progress callback
+     * @param warnings         the warnings
+     * @param progressCallback the progress callback
      */
     public abstract void calculateGenerators(List<String> warnings,
                                              ProgressCallback progressCallback);
@@ -1572,8 +1545,7 @@ public abstract class IntrospectedTable {
     /**
      * Sets the table configuration.
      *
-     * @param tableConfiguration
-     *            the new table configuration
+     * @param tableConfiguration the new table configuration
      */
     public void setTableConfiguration(TableConfiguration tableConfiguration) {
         this.tableConfiguration = tableConfiguration;
@@ -1582,8 +1554,7 @@ public abstract class IntrospectedTable {
     /**
      * Sets the sql map fully qualified runtime table name.
      *
-     * @param fullyQualifiedRuntimeTableName
-     *            the new sql map fully qualified runtime table name
+     * @param fullyQualifiedRuntimeTableName the new sql map fully qualified runtime table name
      */
     public void setSqlMapFullyQualifiedRuntimeTableName(
             String fullyQualifiedRuntimeTableName) {
@@ -1595,8 +1566,7 @@ public abstract class IntrospectedTable {
     /**
      * Sets the sql map aliased fully qualified runtime table name.
      *
-     * @param aliasedFullyQualifiedRuntimeTableName
-     *            the new sql map aliased fully qualified runtime table name
+     * @param aliasedFullyQualifiedRuntimeTableName the new sql map aliased fully qualified runtime table name
      */
     public void setSqlMapAliasedFullyQualifiedRuntimeTableName(
             String aliasedFullyQualifiedRuntimeTableName) {
@@ -1619,8 +1589,7 @@ public abstract class IntrospectedTable {
     /**
      * Sets the my batis3 xml mapper package.
      *
-     * @param mybatis3XmlMapperPackage
-     *            the new my batis3 xml mapper package
+     * @param mybatis3XmlMapperPackage the new my batis3 xml mapper package
      */
     public void setMyBatis3XmlMapperPackage(String mybatis3XmlMapperPackage) {
         internalAttributes.put(
@@ -1641,8 +1610,7 @@ public abstract class IntrospectedTable {
     /**
      * Sets the my batis3 xml mapper file name.
      *
-     * @param mybatis3XmlMapperFileName
-     *            the new my batis3 xml mapper file name
+     * @param mybatis3XmlMapperFileName the new my batis3 xml mapper file name
      */
     public void setMyBatis3XmlMapperFileName(String mybatis3XmlMapperFileName) {
         internalAttributes.put(
@@ -1663,8 +1631,7 @@ public abstract class IntrospectedTable {
     /**
      * Sets the my batis3 java mapper type.
      *
-     * @param mybatis3JavaMapperType
-     *            the new my batis3 java mapper type
+     * @param mybatis3JavaMapperType the new my batis3 java mapper type
      */
     public void setMyBatis3JavaMapperType(String mybatis3JavaMapperType) {
         internalAttributes.put(
@@ -1685,14 +1652,27 @@ public abstract class IntrospectedTable {
     /**
      * Sets the my batis3 sql provider type.
      *
-     * @param mybatis3SqlProviderType
-     *            the new my batis3 sql provider type
+     * @param mybatis3SqlProviderType the new my batis3 sql provider type
      */
     public void setMyBatis3SqlProviderType(String mybatis3SqlProviderType) {
         internalAttributes.put(
                 InternalAttribute.ATTR_MYBATIS3_SQL_PROVIDER_TYPE,
                 mybatis3SqlProviderType);
     }
+    /**
+     * 自定义
+     */
+    public String getCustomWhereSql() {
+      return   internalAttributes.get(
+                InternalAttribute.ATTR_CUSTOM_WHERE_QUERY_ENTITY);
+    }
+
+    public void setCustomWhereSql(String s) {
+        internalAttributes.put(
+                InternalAttribute.ATTR_CUSTOM_WHERE_QUERY_ENTITY,
+                s);
+    }
+
 
     /**
      * Gets the target runtime.
@@ -1994,6 +1974,11 @@ public abstract class IntrospectedTable {
         /**
          * The ATT r_ mybati s3_ sq l_ provide r_ type.
          */
-        ATTR_MYBATIS3_SQL_PROVIDER_TYPE
-    }
+        ATTR_MYBATIS3_SQL_PROVIDER_TYPE,
+
+        /**
+         *自定义的whereSql
+         */
+        ATTR_CUSTOM_WHERE_QUERY_ENTITY
+        }
 }

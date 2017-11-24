@@ -26,9 +26,7 @@ import org.mybatis.generator.codegen.mybatis3.xmlmapper.elements.*;
 import static org.mybatis.generator.internal.util.messages.Messages.getString;
 
 /**
- *
  * @author Jeff Butler
- *
  */
 public class XMLMapperGenerator extends AbstractXmlGenerator {
 
@@ -49,8 +47,9 @@ public class XMLMapperGenerator extends AbstractXmlGenerator {
 
         addResultMapWithoutBLOBsElement(answer);
         addResultMapWithBLOBsElement(answer);
-        addExampleWhereClauseElement(answer);
-        addMyBatis3UpdateByExampleWhereClauseElement(answer);
+//        addExampleWhereClauseElement(answer);
+//        addMyBatis3UpdateByExampleWhereClauseElement(answer);
+        addMybatisSqlWhere(answer);
         addBaseColumnListElement(answer);
         addBlobColumnListElement(answer);
         addSelectByExampleWithBLOBsElement(answer);
@@ -245,6 +244,16 @@ public class XMLMapperGenerator extends AbstractXmlGenerator {
         elementGenerator.setProgressCallback(progressCallback);
         elementGenerator.setWarnings(warnings);
         elementGenerator.addElements(parentElement);
+    }
+
+    // 自定义
+    protected void addMybatisSqlWhere(
+            XmlElement parentElement) {
+        if (introspectedTable.getRules()
+                .generateMyBatis3UpdateByExampleWhereClause()) {
+            AbstractXmlElementGenerator elementGenerator = new SqlWhereParamElementGenerator();
+            initializeAndExecuteGenerator(elementGenerator, parentElement);
+        }
     }
 
     @Override
