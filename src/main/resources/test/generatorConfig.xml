@@ -32,7 +32,15 @@ http://mbg.cndocs.tk/
 
         <!--开启抑制类型的警告信息-->
         <property name="suppressTypeWarnings" value="true"/>
-
+        <!--分页插件-->
+        <plugin type="org.mybatis.generator.plugins.CustomPagePlugin">
+            <property name="pojoUrl" value="${page.path}"/>
+            <property name="targetPackage" value="${page.package}"/>
+            <property name="customStartEndFile1" value="${page.file1}"/>
+            <property name="customStartEndFile1Type" value="${page.file1.type}"/>
+            <property name="customStartEndFile2" value="${page.file2}"/>
+            <property name="customStartEndFile2Type" value="${page.file2.type}"/>
+        </plugin>
         <!-- 插件 ：其他插件参考http://www.jianshu.com/p/1b826d43dbaf-->
         <!--插件 ：用来给Java模型生成equals和hashcode方法-->
         <!--<plugin type="org.mybatis.generator.plugins.EqualsHashCodePlugin"/>-->
@@ -47,6 +55,8 @@ http://mbg.cndocs.tk/
 
         <!-- 统一Mapper 接口 -->
         <plugin type="org.mybatis.generator.plugins.MapperPlugin">
+            <property name="isPage" value="${controller.isPage}"/>
+            <property name="pagePackage" value="${page.package}"/>
             <property name="interfaceName" value="CustomMapper"/>
             <!-- 是否删除Mapper类里的方法，默认删除-->
             <property name="deleteMethod" value="true"/>
@@ -54,6 +64,8 @@ http://mbg.cndocs.tk/
 
         <!-- service层插件 -->
         <plugin type="org.mybatis.generator.plugins.MybatisServicePlugin">
+            <property name="isPage" value="${controller.isPage}"/>
+            <property name="pagePackage" value="${page.package}"/>
             <property name="targetPackage" value="${service.package}"/>
             <property name="implementationPackage" value="${service.package.impl}"/>
             <property name="targetProject" value="${service.path}"/>
@@ -68,6 +80,8 @@ http://mbg.cndocs.tk/
         </plugin>
         <!-- controller层插件 -->
         <plugin type="org.mybatis.generator.plugins.MybatisControllerPlugin">
+            <property name="isPage" value="${controller.isPage}"/>
+            <property name="pagePackage" value="${page.package}"/>
             <property name="targetPackage" value="${controller.package}"/>
             <property name="implementationPackage" value="${controller.package}"/>
             <property name="implementationServicePackage" value="${service.package.impl}"/>
@@ -105,7 +119,7 @@ http://mbg.cndocs.tk/
         </jdbcConnection>
 
         <!-- 类型转换 -->
-        <javaTypeResolver>
+        <javaTypeResolver type="org.mybatis.generator.internal.types.TinyIntTypeResolver">
             <!-- 默认false，把JDBC DECIMAL 和 NUMERIC 类型解析为 Integer，为 true时把JDBC DECIMAL 和
                 NUMERIC 类型解析为java.math.BigDecimal -->
             <property name="forceBigDecimals" value="false"/>
@@ -133,6 +147,8 @@ http://mbg.cndocs.tk/
                          targetProject="${mapper.xml.path}">
             <!-- 解释同上:生成实体类的位置 -->
             <property name="enableSubPackages" value="true"/>
+            <property name="isPage" value="${controller.isPage}"/>
+            <property name="pagePackage" value="${page.package}"/>
         </sqlMapGenerator>
 
 

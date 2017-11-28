@@ -4,6 +4,7 @@ import org.mybatis.generator.api.GeneratedJavaFile;
 import org.mybatis.generator.api.IntrospectedTable;
 import org.mybatis.generator.api.PluginAdapter;
 import org.mybatis.generator.api.dom.java.*;
+import org.mybatis.generator.internal.util.StringUtility;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -27,6 +28,9 @@ public class MapperPlugin extends PluginAdapter {
     private FullyQualifiedJavaType M;
     private FullyQualifiedJavaType MLIST;
     private FullyQualifiedJavaType ID;
+    private FullyQualifiedJavaType queryReqType;
+    private String pagePackage;
+    private boolean isPage = false;
 
 
     @Override
@@ -43,6 +47,12 @@ public class MapperPlugin extends PluginAdapter {
         M = new FullyQualifiedJavaType("M");
         MLIST = new FullyQualifiedJavaType("List<M>");
         ID = new FullyQualifiedJavaType("ID");
+
+        pagePackage = properties.getProperty("pagePackage");
+
+        String isPage = properties.getProperty("isPage");
+        if (StringUtility.stringHasValue(isPage))
+            this.isPage = StringUtility.isTrue(isPage);
 
         String interfacePack = context.getJavaClientGeneratorConfiguration().getTargetPackage();
         interfaceType = new FullyQualifiedJavaType(interfacePack + "." + interfaceName);
@@ -66,6 +76,9 @@ public class MapperPlugin extends PluginAdapter {
 
             //获取实体类
             FullyQualifiedJavaType entityType = new FullyQualifiedJavaType(introspectedTable.getBaseRecordType());
+            queryReqType = new FullyQualifiedJavaType(pagePackage + "." +
+                    entityType.getShortName()+ "QueryReq");
+            topLevelClass.addImportedType(queryReqType);
 
             //注解的添加
             FullyQualifiedJavaType serviceType = new FullyQualifiedJavaType("org.springframework.stereotype.Repository");
@@ -90,12 +103,12 @@ public class MapperPlugin extends PluginAdapter {
             interfaze.addSuperInterface(
                     new FullyQualifiedJavaType(interfaceType.getShortName()
                             + "<"
-                            + entityType.getShortName()
+                            + queryReqType.getShortName()
                             + "," + introspectedTable.getPrimaryKeyColumns().get(0).getFullyQualifiedJavaType().getShortName()
                             + ">"));
 
             //import实体类
-            interfaze.addImportedType(entityType);
+//            interfaze.addImportedType(entityType);
             return true;
         } else return super.clientGenerated(interfaze, topLevelClass, introspectedTable);
     }

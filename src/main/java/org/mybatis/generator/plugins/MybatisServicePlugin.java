@@ -29,6 +29,8 @@ public class MybatisServicePlugin extends PluginAdapter {
     private FullyQualifiedJavaType autowired;
     private FullyQualifiedJavaType service;
     private FullyQualifiedJavaType returnType;
+    private FullyQualifiedJavaType queryReqType;
+    private String pagePackage;
     private String servicePack;
     private String serviceImplPack;
     private String project;
@@ -47,6 +49,8 @@ public class MybatisServicePlugin extends PluginAdapter {
     private boolean enableUpdateByExampleSelective = false;
     private boolean enableUpdateByPrimaryKey = false;
     private boolean enableUpdateByPrimaryKeySelective = false;
+    private boolean isPage = false;
+
 
     public MybatisServicePlugin() {
         super();
@@ -77,6 +81,8 @@ public class MybatisServicePlugin extends PluginAdapter {
 
         String enableUpdateByExample = properties.getProperty("enableUpdateByExample");
 
+        String isPage = properties.getProperty("isPage");
+
         if (StringUtility.stringHasValue(enableInsert))
             this.enableInsert = StringUtility.isTrue(enableInsert);
         if (StringUtility.stringHasValue(enableUpdateByExampleSelective))
@@ -93,12 +99,16 @@ public class MybatisServicePlugin extends PluginAdapter {
             this.enableUpdateByPrimaryKeySelective = StringUtility.isTrue(enableUpdateByPrimaryKeySelective);
         if (StringUtility.stringHasValue(enableUpdateByExample))
             this.enableUpdateByExample = StringUtility.isTrue(enableUpdateByExample);
+        if (StringUtility.stringHasValue(isPage))
+            this.isPage = StringUtility.isTrue(isPage);
 
         servicePack = properties.getProperty("targetPackage");
         serviceImplPack = properties.getProperty("implementationPackage");
         project = properties.getProperty("targetProject");
 
         pojoUrl = context.getJavaModelGeneratorConfiguration().getTargetPackage();
+
+        pagePackage = properties.getProperty("pagePackage");
 
         if (enableAnnotation) {
             autowired = new FullyQualifiedJavaType("org.springframework.beans.factory.annotation.Autowired");
@@ -129,6 +139,8 @@ public class MybatisServicePlugin extends PluginAdapter {
         // 导入必要的类
         addImport(interface1, topLevelClass);
 
+        queryReqType = new FullyQualifiedJavaType(pagePackage + "." + tableName + "QueryReq");
+        topLevelClass.addImportedType(queryReqType);
         // 接口
         addService(interface1, introspectedTable, tableName, files);
         // 实现类
@@ -324,7 +336,7 @@ public class MybatisServicePlugin extends PluginAdapter {
         Method method = new Method();
         method.setName("queryCount");
         method.setReturnType(FullyQualifiedJavaType.getIntInstance());
-        method.addParameter(new Parameter(pojoType, "example"));
+        method.addParameter(new Parameter(isPage?queryReqType:pojoType, "example"));
         method.setVisibility(JavaVisibility.PUBLIC);
         StringBuilder sb = new StringBuilder();
         sb.append("int count = this.");
@@ -346,7 +358,7 @@ public class MybatisServicePlugin extends PluginAdapter {
         Method method = new Method();
         method.setName("queryList");
         method.setReturnType(new FullyQualifiedJavaType("List<" + tableName + ">"));
-        method.addParameter(new Parameter(pojoType, "example"));
+        method.addParameter(new Parameter(isPage?queryReqType:pojoType, "example"));
         method.setVisibility(JavaVisibility.PUBLIC);
         StringBuilder sb = new StringBuilder();
         sb.append("return this.");

@@ -32,9 +32,10 @@ public class MybatisControllerPlugin extends PluginAdapter {
     private FullyQualifiedJavaType RequestParam;
     private FullyQualifiedJavaType ModelAttribute;
     private FullyQualifiedJavaType returnType;
+    private FullyQualifiedJavaType queryReqType;
+    private String pagePackage;
     private String controllerPack;
     private String controllerImplPack;
-//    todo
     private String serviceImplPack;
     private String project;
     private String pojoUrl;
@@ -52,6 +53,7 @@ public class MybatisControllerPlugin extends PluginAdapter {
     private boolean enableUpdateByExampleSelective = false;
     private boolean enableUpdateByPrimaryKey = false;
     private boolean enableUpdateByPrimaryKeySelective = false;
+    private boolean isPage = false;
 
     public MybatisControllerPlugin() {
         super();
@@ -82,6 +84,8 @@ public class MybatisControllerPlugin extends PluginAdapter {
 
         String enableUpdateByExample = properties.getProperty("enableUpdateByExample");
 
+        String isPage = properties.getProperty("isPage");
+
         if (StringUtility.stringHasValue(enableInsert))
             this.enableInsert = StringUtility.isTrue(enableInsert);
         if (StringUtility.stringHasValue(enableUpdateByExampleSelective))
@@ -98,6 +102,8 @@ public class MybatisControllerPlugin extends PluginAdapter {
             this.enableUpdateByPrimaryKeySelective = StringUtility.isTrue(enableUpdateByPrimaryKeySelective);
         if (StringUtility.stringHasValue(enableUpdateByExample))
             this.enableUpdateByExample = StringUtility.isTrue(enableUpdateByExample);
+        if (StringUtility.stringHasValue(isPage))
+            this.isPage = StringUtility.isTrue(isPage);
 
         controllerPack = properties.getProperty("targetPackage");
         controllerImplPack = properties.getProperty("implementationPackage");
@@ -105,6 +111,8 @@ public class MybatisControllerPlugin extends PluginAdapter {
         project = properties.getProperty("targetProject");
 
         pojoUrl = context.getJavaModelGeneratorConfiguration().getTargetPackage();
+
+        pagePackage = properties.getProperty("pagePackage");
 
         if (enableAnnotation) {
             autowired = new FullyQualifiedJavaType("org.springframework.beans.factory.annotation.Autowired");
@@ -170,12 +178,17 @@ public class MybatisControllerPlugin extends PluginAdapter {
         // 添加引用service
         addField(topLevelClass, tableName);
         // 添加方法
-//        topLevelClass.addMethod(countByExample(introspectedTable, tableName));
-//        topLevelClass.addMethod(selectByPrimaryKey(introspectedTable, tableName));
-//        topLevelClass.addMethod(selectByExample(introspectedTable, tableName));
-        topLevelClass.addMethod(getOtherInteger("queryCount", introspectedTable, tableName, 1));
+        queryReqType = new FullyQualifiedJavaType(pagePackage + "." + tableName + "QueryReq");
+        topLevelClass.addImportedType(queryReqType);
+        if (isPage) {
+            topLevelClass.addMethod(getOtherInteger("queryCount", introspectedTable, queryReqType.getShortName(), 1));
+            topLevelClass.addMethod(getOtherInteger("queryList", introspectedTable, queryReqType.getShortName(), 1));
+        } else {
+            topLevelClass.addMethod(getOtherInteger("queryCount", introspectedTable, tableName, 1));
+            topLevelClass.addMethod(getOtherInteger("queryList", introspectedTable, tableName, 1));
+        }
+
         topLevelClass.addMethod(getOtherInteger("queryDetail", introspectedTable, tableName, 2));
-        topLevelClass.addMethod(getOtherInteger("queryList", introspectedTable, tableName, 1));
         topLevelClass.addMethod(getOtherInteger("delete", introspectedTable, tableName, 2));
         topLevelClass.addMethod(getOtherInteger("update", introspectedTable, tableName, 1));
         topLevelClass.addMethod(getOtherInteger("insert", introspectedTable, tableName, 1));

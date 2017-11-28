@@ -31,12 +31,12 @@ public class CountByExampleElementGenerator extends AbstractXmlElementGenerator 
     @Override
     public void addElements(XmlElement parentElement) {
         XmlElement answer = new XmlElement("select"); //$NON-NLS-1$
-        //fixme 这里是parameterType 参数 分页查询参数
+//        这里是否可以配置化？ todo 应该是可以的 待研究
         String fqjt = introspectedTable.getBaseRecordType();
 
         answer.addAttribute(new Attribute(
                 "id", introspectedTable.getCountByExampleStatementId())); //$NON-NLS-1$
-        answer.addAttribute(new Attribute("parameterType", fqjt)); //$NON-NLS-1$
+        answer.addAttribute(new Attribute("parameterType", new StringBuilder(fqjt).append("QueryReq").toString())); //$NON-NLS-1$
         answer.addAttribute(new Attribute("resultType", "java.lang.Long")); //$NON-NLS-1$ //$NON-NLS-2$
 
         context.getCommentGenerator().addComment(answer);
