@@ -104,6 +104,7 @@ public class MapperPlugin extends PluginAdapter {
                     new FullyQualifiedJavaType(interfaceType.getShortName()
                             + "<"
                             + queryReqType.getShortName()
+                            + ","+entityType.getShortName()
                             + "," + introspectedTable.getPrimaryKeyColumns().get(0).getFullyQualifiedJavaType().getShortName()
                             + ">"));
 
@@ -126,7 +127,7 @@ public class MapperPlugin extends PluginAdapter {
             interface1.addImportedType(new FullyQualifiedJavaType("org.apache.ibatis.annotations.Param"));
 
             // 添加泛型支持
-            interfaceType.addTypeArgument(new FullyQualifiedJavaType("M, ID extends Serializable"));
+            interfaceType.addTypeArgument(new FullyQualifiedJavaType("E,M, ID extends Serializable"));
 
             // 添加方法并加注释
             Method method = countByExample(introspectedTable);
@@ -188,7 +189,7 @@ public class MapperPlugin extends PluginAdapter {
 
     private void addExampleClassComment(JavaElement javaElement) {
         javaElement.addJavaDocLine("/**");
-        javaElement.addJavaDocLine(" * 通用IMapper<M, ID>");
+        javaElement.addJavaDocLine(" * 通用IMapper<E,M, ID>");
         javaElement.addJavaDocLine(" * M:实体类");
         javaElement.addJavaDocLine(" * E:Example");
         javaElement.addJavaDocLine(" * ID:主键的变量类型");

@@ -178,6 +178,7 @@ public class MybatisServicePlugin extends PluginAdapter {
 
         if (enableDeleteByPrimaryKey) {
             method = getOtherInteger("deleteByPrimaryKey", introspectedTable, tableName, 2);
+            method.removeAnnotation();
             method.removeAllBodyLines();
             interface1.addMethod(method);
         }
@@ -422,6 +423,7 @@ public class MybatisServicePlugin extends PluginAdapter {
      */
     protected Method getOtherInsertboolean(String methodName, IntrospectedTable introspectedTable, String tableName) {
         Method method = new Method();
+        method.addAnnotation("@Override");
         method.setName(methodName);
         method.setReturnType(returnType);
         method.addParameter(new Parameter(pojoType, "record"));
