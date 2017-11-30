@@ -162,14 +162,17 @@ public class MybatisServicePlugin extends PluginAdapter {
 
         // 添加方法
         Method method = countByExample(introspectedTable, tableName);
+        method.removeAnnotation();
         method.removeAllBodyLines();
         interface1.addMethod(method);
 
         method = selectByPrimaryKey(introspectedTable, tableName);
+        method.removeAnnotation();
         method.removeAllBodyLines();
         interface1.addMethod(method);
 
         method = selectByExample(introspectedTable, tableName);
+        method.removeAnnotation();
         method.removeAllBodyLines();
         interface1.addMethod(method);
 
@@ -180,11 +183,13 @@ public class MybatisServicePlugin extends PluginAdapter {
         }
         if (enableUpdateByPrimaryKeySelective) {
             method = getOtherInteger("updateByPrimaryKeySelective", introspectedTable, tableName, 1);
+            method.removeAnnotation();
             method.removeAllBodyLines();
             interface1.addMethod(method);
         }
         if (enableUpdateByPrimaryKey) {
             method = getOtherInteger("updateByPrimaryKey", introspectedTable, tableName, 1);
+            method.removeAnnotation();
             method.removeAllBodyLines();
             interface1.addMethod(method);
         }
@@ -195,21 +200,25 @@ public class MybatisServicePlugin extends PluginAdapter {
         }
         if (enableUpdateByExampleSelective) {
             method = getOtherInteger("updateByExampleSelective", introspectedTable, tableName, 4);
+            method.removeAnnotation();
             method.removeAllBodyLines();
             interface1.addMethod(method);
         }
         if (enableUpdateByExample) {
             method = getOtherInteger("updateByExample", introspectedTable, tableName, 4);
+            method.removeAnnotation();
             method.removeAllBodyLines();
             interface1.addMethod(method);
         }
         if (enableInsert) {
             method = getOtherInsertboolean("insert", introspectedTable, tableName);
+            method.removeAnnotation();
             method.removeAllBodyLines();
             interface1.addMethod(method);
         }
         if (enableInsertSelective) {
             method = getOtherInsertboolean("insertSelective", introspectedTable, tableName);
+            method.removeAnnotation();
             method.removeAllBodyLines();
             interface1.addMethod(method);
         }
@@ -297,6 +306,7 @@ public class MybatisServicePlugin extends PluginAdapter {
      */
     protected Method selectByPrimaryKey(IntrospectedTable introspectedTable, String tableName) {
         Method method = new Method();
+        method.addAnnotation("@Override");
         method.setName("selectByPrimaryKey");
         method.setReturnType(pojoType);
         if (introspectedTable.getRules().generatePrimaryKeyClass()) {
@@ -334,6 +344,7 @@ public class MybatisServicePlugin extends PluginAdapter {
      */
     protected Method countByExample(IntrospectedTable introspectedTable, String tableName) {
         Method method = new Method();
+        method.addAnnotation("@Override");
         method.setName("queryCount");
         method.setReturnType(FullyQualifiedJavaType.getIntInstance());
         method.addParameter(new Parameter(isPage?queryReqType:pojoType, "example"));
@@ -356,6 +367,7 @@ public class MybatisServicePlugin extends PluginAdapter {
      */
     protected Method selectByExample(IntrospectedTable introspectedTable, String tableName) {
         Method method = new Method();
+        method.addAnnotation("@Override");
         method.setName("queryList");
         method.setReturnType(new FullyQualifiedJavaType("List<" + tableName + ">"));
         method.addParameter(new Parameter(isPage?queryReqType:pojoType, "example"));
@@ -382,6 +394,7 @@ public class MybatisServicePlugin extends PluginAdapter {
      */
     protected Method getOtherInteger(String methodName, IntrospectedTable introspectedTable, String tableName, int type) {
         Method method = new Method();
+        method.addAnnotation("@Override");
         method.setName(methodName);
         method.setReturnType(FullyQualifiedJavaType.getIntInstance());
         String params = addParams(introspectedTable, method, type);

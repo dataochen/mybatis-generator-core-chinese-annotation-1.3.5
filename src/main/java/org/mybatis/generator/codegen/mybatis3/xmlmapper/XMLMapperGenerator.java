@@ -249,8 +249,7 @@ public class XMLMapperGenerator extends AbstractXmlGenerator {
     // 自定义
     protected void addMybatisSqlWhere(
             XmlElement parentElement) {
-        if (introspectedTable.getRules()
-                .generateMyBatis3UpdateByExampleWhereClause()) {
+        if (true) {
             AbstractXmlElementGenerator elementGenerator = new SqlWhereParamElementGenerator();
             initializeAndExecuteGenerator(elementGenerator, parentElement);
         }

@@ -89,8 +89,10 @@ public class CustomPagePlugin extends PluginAdapter {
         method.setName(new StringBuilder("set").append(fileName.replace(fileName.charAt(0),Character.toUpperCase(fileName.charAt(0)))).append("Start").toString());
 //        method.setReturnType(FullyQualifiedJavaType);
         method.setVisibility(JavaVisibility.PUBLIC);
-        method.addParameter(new Parameter(fullyQualifiedJavaType, fileName));
-        method.addBodyLine(new StringBuilder(" this.").append(fileName).append(" = ").append(fileName).append(";").toString());
+        String fileStartName = new StringBuilder(fileName).append("Start").toString();
+        String fileEndName = new StringBuilder(fileName).append("End").toString();
+        method.addParameter(new Parameter(fullyQualifiedJavaType, fileStartName));
+        method.addBodyLine(new StringBuilder(" this.").append(fileStartName).append(" = ").append(fileStartName).append(";").toString());
         topLevelClass.addMethod(method);
         // 添加 end
         Field end = new Field();
@@ -102,7 +104,7 @@ public class CustomPagePlugin extends PluginAdapter {
         method1.setName(new StringBuilder("get").append(fileName.replace(fileName.charAt(0),Character.toUpperCase(fileName.charAt(0)))).append("Start").toString());
         method1.setReturnType(fullyQualifiedJavaType);
         method1.setVisibility(JavaVisibility.PUBLIC);
-        method1.addBodyLine(new StringBuilder("return this.").append(fileName).append(";").toString());
+        method1.addBodyLine(new StringBuilder("return this.").append(fileEndName).append(";").toString());
 //        method1.addParameter(new Parameter(fullyQualifiedJavaType, fileName));
         topLevelClass.addMethod(method1);
     }

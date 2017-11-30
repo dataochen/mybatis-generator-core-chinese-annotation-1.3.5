@@ -41,6 +41,7 @@ public class SqlWhereParamElementGenerator extends
         answer.addAttribute(new Attribute(
                 "id", introspectedTable.getCustomWhereSql()));
         StringBuilder sb = new StringBuilder();
+        // TODO: 2017/11/30  WhereQueryEntity  page配置化
         for (IntrospectedColumn introspectedColumn : ListUtilities.removeGeneratedAlwaysColumns(introspectedTable
                 .getNonPrimaryKeyColumns())) {
             XmlElement isNotNullElement = new XmlElement("if"); //$NON-NLS-1$

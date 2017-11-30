@@ -181,8 +181,8 @@ public class MybatisControllerPlugin extends PluginAdapter {
         queryReqType = new FullyQualifiedJavaType(pagePackage + "." + tableName + "QueryReq");
         topLevelClass.addImportedType(queryReqType);
         if (isPage) {
-            topLevelClass.addMethod(getOtherInteger("queryCount", introspectedTable, queryReqType.getShortName(), 1));
-            topLevelClass.addMethod(getOtherInteger("queryList", introspectedTable, queryReqType.getShortName(), 1));
+            topLevelClass.addMethod(getOtherInteger("queryCount", introspectedTable, queryReqType.getShortName(), 5));
+            topLevelClass.addMethod(getOtherInteger("queryList", introspectedTable, tableName, 5));
         } else {
             topLevelClass.addMethod(getOtherInteger("queryCount", introspectedTable, tableName, 1));
             topLevelClass.addMethod(getOtherInteger("queryList", introspectedTable, tableName, 1));
@@ -229,97 +229,8 @@ public class MybatisControllerPlugin extends PluginAdapter {
         topLevelClass.addField(field);
     }
 
-    /**
-     * 添加方法
-     */
-    protected Method selectByPrimaryKey(IntrospectedTable introspectedTable, String tableName) {
-        Method method = new Method();
-        method.addAnnotation("@RequestMapping(\"/queryDetail\")");
-        method.addAnnotation("@ResponseBody");
-        method.setName("queryDetail");
-        method.setReturnType(pojoType);
-        if (introspectedTable.getRules().generatePrimaryKeyClass()) {
-            FullyQualifiedJavaType type = new FullyQualifiedJavaType(introspectedTable.getPrimaryKeyType());
-            method.addParameter(new Parameter(type, "key"));
-        } else {
-            for (IntrospectedColumn introspectedColumn : introspectedTable.getPrimaryKeyColumns()) {
-                FullyQualifiedJavaType type = introspectedColumn.getFullyQualifiedJavaType();
-                StringBuilder stringBuilder = new StringBuilder("@RequestParam(\"");
-                stringBuilder.append(introspectedColumn.getJavaProperty());
-                stringBuilder.append("\")");
-                method.addParameter(new Parameter(type, introspectedColumn.getJavaProperty(),stringBuilder.toString()));
-            }
-        }
-        method.setVisibility(JavaVisibility.PUBLIC);
-        StringBuilder sb = new StringBuilder();
-        // method.addBodyLine("try {");
-        sb.append("return this.");
-        sb.append(getDaoShort());
-        sb.append("selectByPrimaryKey");
-        sb.append("(");
-        for (IntrospectedColumn introspectedColumn : introspectedTable.getPrimaryKeyColumns()) {
-            sb.append(introspectedColumn.getJavaProperty());
-            sb.append(",");
-        }
-        sb.setLength(sb.length() - 1);
-        sb.append(");");
-        method.addBodyLine(sb.toString());
-        // method.addBodyLine("} catch (Exception e) {");
-        // method.addBodyLine("logger.error(\"Exception: \", e);");
-        // method.addBodyLine("return null;");
-        // method.addBodyLine("}");
-        return method;
-    }
 
-    /**
-     * 添加方法
-     */
-    protected Method countByExample(IntrospectedTable introspectedTable, String tableName) {
-        Method method = new Method();
-        method.addAnnotation("@RequestMapping(\"/queryCount\")");
-        method.addAnnotation("@ResponseBody");
-        method.setName("queryCount");
-        method.setReturnType(FullyQualifiedJavaType.getIntInstance());
-        method.addParameter(new Parameter(pojoCriteriaType, "param"));
-        method.setVisibility(JavaVisibility.PUBLIC);
-        StringBuilder sb = new StringBuilder();
-        sb.append("int count = this.");
-        sb.append(getDaoShort());
-        sb.append("countByExample");
-        sb.append("(");
-        sb.append("param");
-        sb.append(");");
-        method.addBodyLine(sb.toString());
-        method.addBodyLine("logger.debug(\"count: {}\", count);");
-        method.addBodyLine("return count;");
-        return method;
-    }
 
-    /**
-     * 添加方法
-     */
-    protected Method selectByExample(IntrospectedTable introspectedTable, String tableName) {
-        Method method = new Method();
-        method.addAnnotation("@RequestMapping(\"/queryList\")");
-        method.addAnnotation("@ResponseBody");
-        method.setName("queryList");
-        method.setReturnType(new FullyQualifiedJavaType("List<" + tableName + ">"));
-        method.addParameter(new Parameter(pojoType, "param","@ModelAttribute"));
-        method.setVisibility(JavaVisibility.PUBLIC);
-        StringBuilder sb = new StringBuilder();
-        sb.append("return this.");
-        sb.append(getDaoShort());
-        if (introspectedTable.hasBLOBColumns()) {
-            sb.append("selectByExampleWithoutBLOBs");
-        } else {
-            sb.append("selectByExample");
-        }
-        sb.append("(");
-        sb.append("param");
-        sb.append(");");
-        method.addBodyLine(sb.toString());
-        return method;
-    }
 
     /**
      * 添加方法
@@ -332,7 +243,17 @@ public class MybatisControllerPlugin extends PluginAdapter {
         method.addAnnotation(stringBuilder.toString());
         method.addAnnotation("@ResponseBody");
         method.setName(methodName);
-        method.setReturnType(FullyQualifiedJavaType.getIntInstance());
+        switch (methodName) {
+            case "queryDetail":
+                method.setReturnType(new FullyQualifiedJavaType(pojoUrl + "." + tableName));
+                break;
+            case "queryList":
+                method.setReturnType(new FullyQualifiedJavaType(new StringBuffer("List<").append(pojoUrl + "." + tableName).append(">").toString()));
+                break;
+            default:
+                method.setReturnType(FullyQualifiedJavaType.getIntInstance());
+                break;
+        }
         String params = addParams(introspectedTable, method, type);
         method.setVisibility(JavaVisibility.PUBLIC);
         StringBuilder sb = new StringBuilder();
@@ -343,10 +264,12 @@ public class MybatisControllerPlugin extends PluginAdapter {
             sb.append("selectByPrimaryKey");
         } else if ("delete".equals(methodName)) {
             sb.append("deleteByPrimaryKey");
-        }else if ("update".equals(methodName)) {
+        } else if ("update".equals(methodName)) {
             sb.append("updateByPrimaryKeySelective");
-        }else if ("insert".equals(methodName)) {
+        } else if ("insert".equals(methodName)) {
             sb.append("insertSelective");
+        } else {
+            sb.append(methodName);
         }
 
 //        if (introspectedTable.hasBLOBColumns()
@@ -363,32 +286,9 @@ public class MybatisControllerPlugin extends PluginAdapter {
         return method;
     }
 
-    /**
-     * 添加方法
-     */
-    protected Method getOtherInsertboolean(String methodName, IntrospectedTable introspectedTable, String tableName) {
-        Method method = new Method();
-        method.setName(methodName);
-        method.setReturnType(returnType);
-        method.addParameter(new Parameter(pojoType, "record"));
-        method.setVisibility(JavaVisibility.PUBLIC);
-        StringBuilder sb = new StringBuilder();
-        if (returnType == null) {
-            sb.append("this.");
-        } else {
-            sb.append("return this.");
-        }
-        sb.append(getDaoShort());
-        sb.append(methodName);
-        sb.append("(");
-        sb.append("record");
-        sb.append(");");
-        method.addBodyLine(sb.toString());
-        return method;
-    }
 
     /**
-     * type 的意义 pojo 1 key 2 example 3 pojo+example 4
+     * type 的意义 pojo 1 key 2 example 3 pojo+example 4 pojeReq 5
      */
     protected String addParams(IntrospectedTable introspectedTable, Method method, int type1) {
         switch (type1) {
@@ -420,6 +320,9 @@ public class MybatisControllerPlugin extends PluginAdapter {
                 method.addParameter(0, new Parameter(pojoType, "record"));
                 method.addParameter(1, new Parameter(pojoCriteriaType, "example"));
                 return "record, example";
+            case 5:
+                method.addParameter(new Parameter(isPage?queryReqType:pojoType, "example"));
+                return "example";
             default:
                 break;
         }
@@ -458,38 +361,6 @@ public class MybatisControllerPlugin extends PluginAdapter {
         topLevelClass.addField(field);
     }
 
-    /**
-     * 添加方法
-     */
-    protected void addMethod(TopLevelClass topLevelClass) {
-        Method method = new Method();
-        method.setVisibility(JavaVisibility.PUBLIC);
-        method.setName("setSuccess");
-        method.addParameter(new Parameter(FullyQualifiedJavaType.getBooleanPrimitiveInstance(), "success"));
-        method.addBodyLine("this.success = success;");
-        topLevelClass.addMethod(method);
-
-        method = new Method();
-        method.setVisibility(JavaVisibility.PUBLIC);
-        method.setReturnType(FullyQualifiedJavaType.getBooleanPrimitiveInstance());
-        method.setName("isSuccess");
-        method.addBodyLine("return success;");
-        topLevelClass.addMethod(method);
-
-        method = new Method();
-        method.setVisibility(JavaVisibility.PUBLIC);
-        method.setName("setMessage");
-        method.addParameter(new Parameter(FullyQualifiedJavaType.getStringInstance(), "message"));
-        method.addBodyLine("this.message = message;");
-        topLevelClass.addMethod(method);
-
-        method = new Method();
-        method.setVisibility(JavaVisibility.PUBLIC);
-        method.setReturnType(FullyQualifiedJavaType.getStringInstance());
-        method.setName("getMessage");
-        method.addBodyLine("return message;");
-        topLevelClass.addMethod(method);
-    }
 
     /**
      * 添加方法

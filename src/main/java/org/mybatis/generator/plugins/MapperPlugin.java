@@ -78,7 +78,7 @@ public class MapperPlugin extends PluginAdapter {
             FullyQualifiedJavaType entityType = new FullyQualifiedJavaType(introspectedTable.getBaseRecordType());
             queryReqType = new FullyQualifiedJavaType(pagePackage + "." +
                     entityType.getShortName()+ "QueryReq");
-            topLevelClass.addImportedType(queryReqType);
+            interfaze.addImportedType(queryReqType);
 
             //注解的添加
             FullyQualifiedJavaType serviceType = new FullyQualifiedJavaType("org.springframework.stereotype.Repository");
@@ -93,7 +93,7 @@ public class MapperPlugin extends PluginAdapter {
             FullyQualifiedJavaType exampleType = new FullyQualifiedJavaType(introspectedTable.getExampleType());
             interfaze.addImportedType(exampleType);
 
-            if (introspectedTable.getPrimaryKeyColumns() == null) {
+            if (introspectedTable.getPrimaryKeyColumns() == null||introspectedTable.getPrimaryKeyColumns().get(0)==null) {
                 interfaze.addImportedType(new FullyQualifiedJavaType("该表没设置主键"));
             } else {
                 interfaze.addImportedType(introspectedTable.getPrimaryKeyColumns().get(0).getFullyQualifiedJavaType());

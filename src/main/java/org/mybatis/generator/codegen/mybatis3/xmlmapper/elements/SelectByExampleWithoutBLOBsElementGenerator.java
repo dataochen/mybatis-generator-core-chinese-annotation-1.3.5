@@ -41,7 +41,7 @@ public class SelectByExampleWithoutBLOBsElementGenerator extends
                 introspectedTable.getSelectByExampleStatementId()));
         answer.addAttribute(new Attribute(
                 "resultMap", introspectedTable.getBaseResultMapId())); //$NON-NLS-1$
-        answer.addAttribute(new Attribute("parameterType", fqjt)); //$NON-NLS-1$
+        answer.addAttribute(new Attribute("parameterType", new StringBuilder(fqjt).append("QueryReq").toString())); //$NON-NLS-1$
 
         context.getCommentGenerator().addComment(answer);
         answer.addElement(new TextElement("select "));
