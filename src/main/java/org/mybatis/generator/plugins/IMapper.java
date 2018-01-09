@@ -9,8 +9,8 @@ import java.util.List;
  * E:Example
  * ID:主键的变量类型
  *
- * @author orange1438
- *         github: github.com/orange1438
+ * @author dataochen
+ *         github: github.com/dataochen
  *         date: 2017/02/19 21:39
  */
 public interface IMapper<M, E, ID extends Serializable> {

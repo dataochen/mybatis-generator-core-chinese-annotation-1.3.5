@@ -11,9 +11,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Github github.com/orange1438
+ * Github github.com/dataochen
  *
- * @author orange1438
+ * @author dataochen
  *         2016/10/11 23:10
  */
 public class MybatisServicePlugin extends PluginAdapter {

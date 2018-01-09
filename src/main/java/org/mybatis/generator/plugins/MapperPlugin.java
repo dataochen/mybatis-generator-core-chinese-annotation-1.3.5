@@ -14,8 +14,8 @@ import java.util.List;
 /**
  * 统一Mapper生成
  *
- * @author orange1438
- *         github: github.com/orange1438
+ * @author dataochen
+ *         github: github.com/dataochen
  *         date: 2017/02/19 20:05
  */
 public class MapperPlugin extends PluginAdapter {
@@ -194,8 +194,8 @@ public class MapperPlugin extends PluginAdapter {
         javaElement.addJavaDocLine(" * E:Example");
         javaElement.addJavaDocLine(" * ID:主键的变量类型");
         javaElement.addJavaDocLine(" *");
-        javaElement.addJavaDocLine(" * @author orange1438");
-        javaElement.addJavaDocLine(" *         github: https://github.com/orange1438");
+        javaElement.addJavaDocLine(" * @author dataochen");
+        javaElement.addJavaDocLine(" *         github: https://github.com/dataochen");
         javaElement.addJavaDocLine(" *         date: " + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
         javaElement.addJavaDocLine(" */");
     }

@@ -75,7 +75,7 @@ public class DefaultCommentGenerator implements CommentGenerator {
         suppressAllComments = false;
         addRemarkComments = false;
         addMethodFinal = true;
-        author = "orange1438 code generator";
+        author = "dataochen code generator";
     }
 
     /* (non-Javadoc)
@@ -83,7 +83,7 @@ public class DefaultCommentGenerator implements CommentGenerator {
      */
     public void addJavaFileComment(CompilationUnit compilationUnit) {
         // add no file level comments by default
-        compilationUnit.addFileCommentLine("/* https://github.com/orange1438 */");
+        compilationUnit.addFileCommentLine("/* https://github.com/dataochen */");
     }
 
     /**
@@ -188,7 +188,7 @@ public class DefaultCommentGenerator implements CommentGenerator {
             return;
         }
         javaElement.addJavaDocLine("/**");
-        javaElement.addJavaDocLine(" * 本文件由 https://github.com/orange1438/mybatis-generator-core-chinese-annotation1.3.5-chinese-annotation 自动生成");
+        javaElement.addJavaDocLine(" * 本文件由 https://github.com/dataochen/mybatis-generator-core-chinese-annotation1.3.5-chinese-annotation 自动生成");
         //    javaElement.addJavaDocLine(" * 本文件由 橙子 自动生成");
         addJavadocTag(javaElement, false);
         javaElement.addJavaDocLine(" */");
